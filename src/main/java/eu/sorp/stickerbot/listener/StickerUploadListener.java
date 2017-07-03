@@ -39,6 +39,7 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
                             //Register Sticker
                             Sticker sticker = new Sticker(stickerName, new URL(stickerURL));
                             StickerManager.addSticker(sticker);
+                            StickerBot.urlfile.save();
                             
                             //t.getMessage().reply("Downloaded " + fileName + " to /stickers/" + stickerName + "." + fileFormat);
                             t.getMessage().reply("Sticker wurde erstellt!");

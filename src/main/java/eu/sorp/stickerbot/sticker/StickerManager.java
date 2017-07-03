@@ -21,7 +21,6 @@ public class StickerManager {
     public static void addSticker(Sticker s){
         stickers.add(s);
         StickerBot.urlfile.getJsonObject().put(s.getName(), s.getURL().toString());
-        StickerBot.urlfile.save();
         System.out.println("Added Sticker " + s.getName());
     }
     

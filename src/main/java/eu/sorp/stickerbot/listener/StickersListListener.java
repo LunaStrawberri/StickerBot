@@ -19,7 +19,7 @@ public class StickersListListener implements IListener<MessageReceivedEvent> {
             
             StringBuilder stickers = new StringBuilder();
            
-            stickers.append("```");
+            stickers.append("```").append("\n");
             StickerManager.stickers.forEach((t) -> {
                 stickers.append(t.getName()).append("\n");
             });
