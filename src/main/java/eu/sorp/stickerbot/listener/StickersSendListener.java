@@ -20,7 +20,7 @@ public class StickersSendListener implements IListener<MessageReceivedEvent> {
         String message = t.getMessage().getContent();
         
         StickerManager.stickers.forEach((s) -> {
-            if(message.equalsIgnoreCase("#" + s.getName()) && !(message.equalsIgnoreCase("#upload") || message.equalsIgnoreCase("#list"))){
+            if(message.equals("#" + s.getName()) && !(message.equalsIgnoreCase("#upload") || message.equalsIgnoreCase("#list"))){
                 try {
                     t.getMessage().delete();
                     t.getChannel().sendFile(new File(s.getPath()));
