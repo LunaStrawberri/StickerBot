@@ -3,6 +3,7 @@ package eu.sorp.stickerbot;
 import eu.sorp.stickerbot.configuration.Config;
 import eu.sorp.stickerbot.listener.ReadyEventListener;
 import eu.sorp.stickerbot.listener.StickerUploadListener;
+import eu.sorp.stickerbot.listener.StickersListListener;
 import eu.sorp.stickerbot.listener.StickersSendListener;
 import eu.sorp.stickerbot.sticker.StickerManager;
 import sx.blah.discord.api.ClientBuilder;
@@ -39,6 +40,7 @@ public class StickerBot {
         dispatcher.registerListener(new ReadyEventListener());
         dispatcher.registerListener(new StickerUploadListener());
         dispatcher.registerListener(new StickersSendListener());
+        dispatcher.registerListener(new StickersListListener());
     }
     
 }
