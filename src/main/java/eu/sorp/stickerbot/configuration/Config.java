@@ -1,9 +1,9 @@
 package eu.sorp.stickerbot.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,9 +43,9 @@ public final class Config {
     }
     
     public void save(){
-        try(FileWriter fileWriter = new FileWriter(fileName)){
-            fileWriter.write(jsonObject.toJSONString());
-            fileWriter.flush();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, jsonObject);
         } catch (IOException ex) {
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
         }
