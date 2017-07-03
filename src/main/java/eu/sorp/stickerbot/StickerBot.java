@@ -6,6 +6,7 @@ import eu.sorp.stickerbot.listener.StickerUploadListener;
 import eu.sorp.stickerbot.listener.StickersListListener;
 import eu.sorp.stickerbot.listener.StickersSendListener;
 import eu.sorp.stickerbot.sticker.StickerManager;
+import eu.sorp.stickerbot.url.UrlFile;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
@@ -20,13 +21,16 @@ public class StickerBot {
      * DiscordClient variable
      */
     public static IDiscordClient DISCORD_CLIENT;
+    public static Config config;
+    public static UrlFile urlfile;
     
     /**
      * Main function
      * @param args 
      */
     public static void main(String[] args) {
-        Config config = new Config("config.json");
+        config = new Config("config.json");
+        urlfile = new UrlFile("url.json");
         StickerManager.loadStickers();
         DISCORD_CLIENT = new ClientBuilder().withToken((String) config.getJsonObject().get("bot-token")).login();
         registerListeners(DISCORD_CLIENT.getDispatcher());

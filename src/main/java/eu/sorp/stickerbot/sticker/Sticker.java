@@ -1,5 +1,7 @@
 package eu.sorp.stickerbot.sticker;
 
+import java.net.URL;
+
 /**
  *
  * @author sorp
@@ -7,19 +9,19 @@ package eu.sorp.stickerbot.sticker;
 public class Sticker {
     
     private final String name;
-    private final String path;
+    private final URL url;
     
-    public Sticker(String name, String path){
+    public Sticker(String name, URL url){
         this.name = name;
-        this.path = path;
+        this.url = url;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getPath() {
-        return path;
+    public URL getURL() {
+        return url;
     }
     
     
