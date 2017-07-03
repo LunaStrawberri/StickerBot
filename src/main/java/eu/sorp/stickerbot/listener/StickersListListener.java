@@ -25,7 +25,9 @@ public class StickersListListener implements IListener<MessageReceivedEvent> {
             });
             stickers.append("```");
                 
-            event.getMessage().reply(stickers.toString());
+            event.getAuthor().getOrCreatePMChannel().sendMessage(stickers.toString());
+            if(event.getGuild() != null) event.getMessage().reply("Die Liste wurde dir privat gesendet.");
+            
             
         }
         
