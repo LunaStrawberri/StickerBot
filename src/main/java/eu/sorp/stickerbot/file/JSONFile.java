@@ -1,4 +1,4 @@
-package eu.sorp.stickerbot.configuration;
+package eu.sorp.stickerbot.file;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -15,28 +15,30 @@ import org.json.simple.parser.ParseException;
  *
  * @author sorp
  */
-public final class Config {
+public final class JSONFile {
     
     private final String fileName;
     private final File file;
     private JSONObject jsonObject;
+    private boolean newCreated;
     
-    public Config(String fileName){
+    public JSONFile(String fileName){
         this.fileName = fileName;
         this.file = new File(fileName);
         
         if(this.file.exists()){
+            this.newCreated = false;
             try {
                 final JSONParser parser = new JSONParser();
                 this.jsonObject = (JSONObject) parser.parse(new FileReader(fileName));
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JSONFile.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException | ParseException ex) {
-                Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JSONFile.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
+            this.newCreated = true;
             this.jsonObject = new JSONObject();
-            this.jsonObject.put("bot-token", "BOT-TOKEN");
             this.save();
         }
         
@@ -47,7 +49,7 @@ public final class Config {
             ObjectMapper mapper = new ObjectMapper();
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, jsonObject);
         } catch (IOException ex) {
-            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JSONFile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -57,6 +59,10 @@ public final class Config {
 
     public JSONObject getJsonObject() {
         return jsonObject;
+    }
+    
+    public boolean getNewCreated(){
+        return newCreated;
     }
     
     public String getFileName() {
