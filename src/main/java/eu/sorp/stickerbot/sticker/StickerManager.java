@@ -1,15 +1,11 @@
 package eu.sorp.stickerbot.sticker;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import eu.sorp.stickerbot.StickerBot;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -24,30 +20,30 @@ public class StickerManager {
     
     public static void addSticker(Sticker s){
         stickers.add(s);
+        StickerBot.urlfile.getJsonObject().put(s.getName(), s.getURL().toString());
         System.out.println("Added Sticker " + s.getName());
     }
     
     public static void removeSticker(Sticker s){
         stickers.remove(s);
+        StickerBot.urlfile.getJsonObject().remove(s.getName());
+        StickerBot.urlfile.save();
         System.out.println("Removed Sticker " + s.getName());
     }
     
     public static void loadStickers(){
-        
-        try {
-            List<File> filesInFolder = Files.walk(Paths.get("stickers"))
-                    .filter(Files::isRegularFile)
-                    .map(Path::toFile)
-                    .collect(Collectors.toList());
+        StickerBot.urlfile.getJsonObject().forEach((k,v) -> {
             
-            filesInFolder.forEach((t) -> {
-                Sticker s = new Sticker(t.getName().substring(0, t.getName().length() - 4), t.getPath());
+            try {
+                String key = (String)k;
+                String value = (String)v;
+                Sticker s = new Sticker(key, new URL(value));
                 addSticker(s);
-            });
-            
-        } catch (IOException ex) {
-            Logger.getLogger(StickerManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(StickerManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
     }
     
