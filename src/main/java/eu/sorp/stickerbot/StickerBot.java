@@ -2,6 +2,7 @@ package eu.sorp.stickerbot;
 
 import eu.sorp.stickerbot.file.JSONFile;
 import eu.sorp.stickerbot.listener.ReadyEventListener;
+import eu.sorp.stickerbot.listener.StickerRemoveListener;
 import eu.sorp.stickerbot.listener.StickerUploadListener;
 import eu.sorp.stickerbot.listener.StickersListListener;
 import eu.sorp.stickerbot.listener.StickersSendListener;
@@ -11,6 +12,7 @@ import java.util.Map;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
+import sx.blah.discord.handle.obj.IUser;
 
 /**
  *
@@ -22,6 +24,7 @@ public class StickerBot {
      * DiscordClient variable
      */
     public static IDiscordClient DISCORD_CLIENT;
+    public static IUser BOT_OWNER;
     public static JSONFile config;
     public static JSONFile urlfile;
     
@@ -35,6 +38,7 @@ public class StickerBot {
         StickerManager.loadStickers();
         DISCORD_CLIENT = new ClientBuilder().withToken((String) config.getJsonObject().get("bot-token")).login();
         registerListeners(DISCORD_CLIENT.getDispatcher());
+        setOwner();
     }
     
     /**
@@ -46,6 +50,18 @@ public class StickerBot {
         dispatcher.registerListener(new StickerUploadListener());
         dispatcher.registerListener(new StickersSendListener());
         dispatcher.registerListener(new StickersListListener());
+        dispatcher.registerListener(new StickerRemoveListener());
+    }
+    
+    private static void setOwner(){
+        if(config.getJsonObject().get("owner") != ""){
+            try{
+                long ownerID = Long.parseLong((String) config.getJsonObject().get("owner"));
+                BOT_OWNER = DISCORD_CLIENT.getUserByID(ownerID);
+            } catch(NumberFormatException e){
+                e.printStackTrace();
+            }
+        }
     }
     
     private static Map<String, Object> getConfigDefaults(){

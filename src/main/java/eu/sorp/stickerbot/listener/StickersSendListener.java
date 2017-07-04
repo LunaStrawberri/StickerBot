@@ -19,7 +19,7 @@ public class StickersSendListener implements IListener<MessageReceivedEvent> {
         String message = t.getMessage().getContent();
         
         StickerManager.stickers.forEach((s) -> {
-            if(message.equals("#" + s.getName()) && !(message.equalsIgnoreCase("#upload") || message.equalsIgnoreCase("#list"))){
+            if(message.equals("#" + s.getName()) && !(message.equalsIgnoreCase("#upload") || message.equalsIgnoreCase("#list") || message.equalsIgnoreCase("#remove"))){
                     t.getMessage().delete();
                     
                     EmbedBuilder stickerBuilder = new EmbedBuilder()
