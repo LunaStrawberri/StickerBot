@@ -16,6 +16,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
  */
 public class StickerUploadListener implements IListener<MessageReceivedEvent> {
 
+    //#TODO block non-image files
     @Override
     public void handle(MessageReceivedEvent t) {
         
@@ -23,7 +24,6 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
         
         if(message.toLowerCase().startsWith("#upload")){
             if(!t.getMessage().getAttachments().isEmpty()){
-                
                 message = message.replaceFirst("(?i)#upload ", "");
                 
                 if(message.length() > 0){
