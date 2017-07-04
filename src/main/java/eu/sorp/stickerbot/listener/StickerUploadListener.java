@@ -5,6 +5,8 @@ import eu.sorp.stickerbot.sticker.Sticker;
 import eu.sorp.stickerbot.sticker.StickerManager;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sx.blah.discord.api.events.IListener;
@@ -16,14 +18,13 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
  */
 public class StickerUploadListener implements IListener<MessageReceivedEvent> {
 
-    //#TODO block non-image files
     @Override
     public void handle(MessageReceivedEvent t) {
         
         String message = t.getMessage().getContent();
         
         if(message.toLowerCase().startsWith("#upload")){
-            if(!t.getMessage().getAttachments().isEmpty()){
+            if(!t.getMessage().getAttachments().isEmpty() && isPicture(t.getMessage().getAttachments().get(0).getFilename())){
                 message = message.replaceFirst("(?i)#upload ", "");
                 
                 if(message.length() > 0){
@@ -60,6 +61,13 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
             }
         }
         
+    }
+    
+    public boolean isPicture(String fileName){
+        List<String> validFormats = Arrays.asList("gif", "png", "jpg");
+        String format = fileName.substring(fileName.length() - 3, fileName.length());
+        
+        return validFormats.contains(format);
     }
     
 }
