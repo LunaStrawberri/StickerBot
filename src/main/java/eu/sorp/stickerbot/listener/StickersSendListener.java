@@ -1,14 +1,11 @@
 package eu.sorp.stickerbot.listener;
 
 import eu.sorp.stickerbot.sticker.StickerManager;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
+import java.time.LocalDateTime;
 import sx.blah.discord.api.events.IListener;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.util.EmbedBuilder;
 
 /**
  *
@@ -23,25 +20,17 @@ public class StickersSendListener implements IListener<MessageReceivedEvent> {
         
         StickerManager.stickers.forEach((s) -> {
             if(message.equals("#" + s.getName()) && !(message.equalsIgnoreCase("#upload") || message.equalsIgnoreCase("#list"))){
-                try {
                     t.getMessage().delete();
                     
-                    String[] stickerURLSplit = s.getURL().toString().split("/");
-                    String fileName = stickerURLSplit[stickerURLSplit.length - 1];
+                    EmbedBuilder stickerBuilder = new EmbedBuilder()
+                            .withImage(s.getURL().toString())
+                            .withAuthorName(t.getAuthor().getDisplayName(t.getGuild()))
+                            .withAuthorIcon(t.getAuthor().getAvatarURL())
+                            .withFooterText("Sticker: " + s.getName())
+                            .withTimestamp(LocalDateTime.now());
+                    EmbedObject sticker = stickerBuilder.build();
                     
-                    File sticker = new File(FileUtils.getTempDirectoryPath() + "/" + fileName);
-                    
-                    System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0");
-                    FileUtils.copyURLToFile(s.getURL(), sticker);
-                    
-                    t.getChannel().sendFile(sticker);
-                    
-                    sticker.delete();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(StickersSendListener.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(StickersSendListener.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    t.getChannel().sendMessage(sticker);
            }
         });
         
