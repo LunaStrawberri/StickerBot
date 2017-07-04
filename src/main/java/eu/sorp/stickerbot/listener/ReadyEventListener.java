@@ -12,9 +12,8 @@ public class ReadyEventListener implements IListener<ReadyEvent> {
 
     @Override
     public void handle(ReadyEvent t) {
-        
         StickerBot.DISCORD_CLIENT.changePlayingText("Stickers");
-        
+        StickerBot.setOwner();
     }
     
 }

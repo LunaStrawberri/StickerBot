@@ -38,7 +38,6 @@ public class StickerBot {
         StickerManager.loadStickers();
         DISCORD_CLIENT = new ClientBuilder().withToken((String) config.getJsonObject().get("bot-token")).login();
         registerListeners(DISCORD_CLIENT.getDispatcher());
-        setOwner();
     }
     
     /**
@@ -53,11 +52,12 @@ public class StickerBot {
         dispatcher.registerListener(new StickerRemoveListener());
     }
     
-    private static void setOwner(){
+    public static void setOwner(){
         if(config.getJsonObject().get("owner") != ""){
             try{
                 long ownerID = Long.parseLong((String) config.getJsonObject().get("owner"));
                 BOT_OWNER = DISCORD_CLIENT.getUserByID(ownerID);
+                System.out.println("Bot owner: " + BOT_OWNER.getName() + "#" + BOT_OWNER.getDiscriminator());
             } catch(NumberFormatException e){
                 e.printStackTrace();
             }
