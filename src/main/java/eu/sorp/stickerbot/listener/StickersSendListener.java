@@ -1,7 +1,6 @@
 package eu.sorp.stickerbot.listener;
 
 import eu.sorp.stickerbot.sticker.StickerManager;
-import java.time.LocalDateTime;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -27,7 +26,7 @@ public class StickersSendListener implements IListener<MessageReceivedEvent> {
                             .withAuthorName(t.getAuthor().getDisplayName(t.getGuild()))
                             .withAuthorIcon(t.getAuthor().getAvatarURL())
                             .withFooterText("Sticker: " + s.getName())
-                            .withTimestamp(LocalDateTime.now());
+                            .withTimestamp(System.currentTimeMillis());
                     EmbedObject sticker = stickerBuilder.build();
                     
                     t.getChannel().sendMessage(sticker);
