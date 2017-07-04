@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONObject;
@@ -20,28 +21,49 @@ public final class JSONFile {
     private final String fileName;
     private final File file;
     private JSONObject jsonObject;
-    private boolean newCreated;
     
     public JSONFile(String fileName){
         this.fileName = fileName;
         this.file = new File(fileName);
         
         if(this.file.exists()){
-            this.newCreated = false;
-            try {
-                final JSONParser parser = new JSONParser();
-                this.jsonObject = (JSONObject) parser.parse(new FileReader(fileName));
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(JSONFile.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException | ParseException ex) {
-                Logger.getLogger(JSONFile.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            parse();
         } else {
-            this.newCreated = true;
             this.jsonObject = new JSONObject();
             this.save();
         }
         
+    }
+    
+    public JSONFile(String fileName, Map<String, Object> defaultValues){
+        this.fileName = fileName;
+        this.file = new File(fileName);
+        
+        if(this.file.exists()){
+            parse();
+        } else {
+            this.jsonObject = new JSONObject();
+            this.save();
+        }
+        
+        //Load Defaults
+        defaultValues.forEach((t, u) -> {
+            if(!this.jsonObject.containsKey(t))
+                this.jsonObject.put(t, u);
+        });
+        this.save();
+        
+    }
+    
+    private void parse(){
+        try {
+            final JSONParser parser = new JSONParser();
+            this.jsonObject = (JSONObject) parser.parse(new FileReader(fileName));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JSONFile.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(JSONFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void save(){
@@ -59,10 +81,6 @@ public final class JSONFile {
 
     public JSONObject getJsonObject() {
         return jsonObject;
-    }
-    
-    public boolean getNewCreated(){
-        return newCreated;
     }
     
     public String getFileName() {
