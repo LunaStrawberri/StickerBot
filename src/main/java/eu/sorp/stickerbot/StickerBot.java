@@ -30,11 +30,7 @@ public class StickerBot {
      * @param args 
      */
     public static void main(String[] args) {
-        
-        Map<String, Object> configDefaults = new HashMap<>();
-        configDefaults.put("bot-token", "INSERT-BOT-TOKEN");
-        configDefaults.put("owner", "");
-        config = new JSONFile("config.json", configDefaults);
+        config = new JSONFile("config.json", getConfigDefaults());
         urlfile = new JSONFile("url.json");
         StickerManager.loadStickers();
         DISCORD_CLIENT = new ClientBuilder().withToken((String) config.getJsonObject().get("bot-token")).login();
@@ -50,6 +46,13 @@ public class StickerBot {
         dispatcher.registerListener(new StickerUploadListener());
         dispatcher.registerListener(new StickersSendListener());
         dispatcher.registerListener(new StickersListListener());
+    }
+    
+    private static Map<String, Object> getConfigDefaults(){
+        Map<String, Object> configDefaults = new HashMap<>();
+        configDefaults.put("bot-token", "INSERT-BOT-TOKEN");
+        configDefaults.put("owner", "");
+        return configDefaults;
     }
     
 }
