@@ -41,6 +41,11 @@ public class StickerBot {
     public static JSONFile urlfile;
     
     /**
+     * upload role variable
+     */
+    public static String uploadRole;
+    
+    /**
      * Main function
      * @param args 
      */
@@ -81,8 +86,10 @@ public class StickerBot {
     
     private static Map<String, Object> getConfigDefaults(){
         Map<String, Object> configDefaults = new HashMap<>();
-        configDefaults.put("bot-token", "INSERT-BOT-TOKEN");
         configDefaults.put("owner", "");
+        configDefaults.put("upload-role", "none");
+        configDefaults.put("remove-role", "null (admins & bot owner)");
+        configDefaults.put("bot-token", "INSERT-BOT-TOKEN");
         return configDefaults;
     }
     

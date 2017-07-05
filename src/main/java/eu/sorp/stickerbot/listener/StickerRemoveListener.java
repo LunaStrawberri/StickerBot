@@ -4,6 +4,10 @@ import eu.sorp.stickerbot.StickerBot;
 import eu.sorp.stickerbot.sticker.StickerManager;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IRole;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 
 /**
  *
@@ -15,7 +19,7 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
     public void handle(MessageReceivedEvent event) {
         
         if(event.getMessage().getContent().startsWith("#remove")){
-            if(event.getAuthor().equals(StickerBot.BOT_OWNER)){
+            if(isAllowedToRemove(event.getGuild(), event.getAuthor())){
                 String stickerName = event.getMessage().getContent();
                 stickerName = stickerName.replaceFirst("(?i)#remove", "");
                 stickerName = stickerName.trim();
@@ -28,10 +32,33 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
                 }
                 
             } else {
-                event.getMessage().reply("Diese Funktion ist für dich nicht verfügbar.");
+                event.getMessage().reply("Du bist nicht dazu berichtigt, einen Sticker zu löschen.");
             }
         }
         
+    }
+    
+     public boolean isAllowedToRemove(IGuild guild, IUser user){
+        boolean allowed = false;
+        
+        if(user.equals(StickerBot.BOT_OWNER)) return true;
+        
+        final String uploadRole = (String) StickerBot.config.getJsonObject().get("remove-role");
+        if(!uploadRole.equals("none")){
+            if(!user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)){
+                for(IRole role : user.getRolesForGuild(guild)){
+                    if(role.getName().equals(uploadRole)){
+                        allowed = true;
+                    }
+                }
+            } else {
+                allowed = true;
+            }
+        } else {
+            allowed = true;
+        }
+        
+        return allowed;
     }
     
 }
