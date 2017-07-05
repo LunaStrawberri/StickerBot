@@ -24,8 +24,20 @@ public class StickerBot {
      * DiscordClient variable
      */
     public static IDiscordClient DISCORD_CLIENT;
+
+    /**
+     * Bot owner variable
+     */
     public static IUser BOT_OWNER;
+
+    /**
+     * config file variable
+     */
     public static JSONFile config;
+
+    /**
+     * url file variable
+     */
     public static JSONFile urlfile;
     
     /**
@@ -42,7 +54,7 @@ public class StickerBot {
     
     /**
      * Registers the listeners
-     * @param dispatcher
+     * @param dispatcher Discord EventDispatcher
      */
     public static void registerListeners(EventDispatcher dispatcher){
         dispatcher.registerListener(new ReadyEventListener());
@@ -52,6 +64,9 @@ public class StickerBot {
         dispatcher.registerListener(new StickerRemoveListener());
     }
     
+    /**
+     * Sets the bot owner
+     */
     public static void setOwner(){
         if(config.getJsonObject().get("owner") != ""){
             try{

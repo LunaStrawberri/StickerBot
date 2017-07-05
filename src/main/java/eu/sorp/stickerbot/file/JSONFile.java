@@ -22,6 +22,10 @@ public final class JSONFile {
     private final File file;
     private JSONObject jsonObject;
     
+    /**
+     * JSONFile constructor 
+     * @param fileName name of the json file (string)
+     */
     public JSONFile(String fileName){
         this.fileName = fileName;
         this.file = new File(fileName);
@@ -35,6 +39,11 @@ public final class JSONFile {
         
     }
     
+    /**
+     * JSONFile constructor with defaultValues
+     * @param fileName name of the json file (string)
+     * @param defaultValues defaultValues of the file (Map<String,Object>)
+     */
     public JSONFile(String fileName, Map<String, Object> defaultValues){
         this.fileName = fileName;
         this.file = new File(fileName);
@@ -66,6 +75,9 @@ public final class JSONFile {
         }
     }
     
+    /**
+     * writes the jsonobject values in a file
+     */
     public void save(){
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -75,14 +87,26 @@ public final class JSONFile {
         }
     }
 
+    /**
+     * Returns the file
+     * @return file variable
+     */
     public File getFile() {
         return file;
     }
 
+    /**
+     * Returns the JSONObject
+     * @return jsonObject variable
+     */
     public JSONObject getJsonObject() {
         return jsonObject;
     }
     
+    /**
+     * Returns the file name
+     * @return fileName variable
+     */
     public String getFileName() {
         return fileName;
     }
