@@ -21,10 +21,15 @@ public class StickerManager {
     /**
      * Adds a sticker to the stickers list and url file
      * @param s sticker to add
+     * @param save save stickers to the url.json file
      */
-    public static void addSticker(Sticker s){
+    public static void addSticker(Sticker s, boolean save){
         stickers.add(s);
-        StickerBot.urlfile.getJsonObject().put(s.getName(), s.getURL().toString());
+        sortStickers();
+        if(save){ 
+            StickerBot.urlfile.getJsonObject().put(s.getName(), s.getURL().toString());
+            StickerBot.urlfile.save();
+        }
         System.out.println("Added Sticker " + s.getName());
     }
     
@@ -45,15 +50,35 @@ public class StickerManager {
     public static void loadStickers(){
         StickerBot.urlfile.getJsonObject().forEach((k,v) -> {
             try {
-                String key = (String)k;
-                String value = (String)v;
-                Sticker s = new Sticker(key, new URL(value));
-                addSticker(s);
+                addSticker(new Sticker((String)k, new URL((String)v)), false);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(StickerManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
+    }
+    
+    /**
+     * Sorts the stickers by their names
+     */
+    public static void sortStickers(){
+        stickers.sort((o1, o2) -> {
+            for(int i = 0; i <= o1.getName().length() && i <= o2.getName().length(); i++){
+                
+                if(o1.getName().equalsIgnoreCase(o2.getName())){
+                    if(o1.getName().charAt(i) > o2.getName().charAt(i))
+                        return 1;
+                    else if(o1.getName().charAt(i) < o2.getName().charAt(i))
+                        return -1;
+                }
+                else if(o1.getName().toLowerCase().charAt(i) > o2.getName().toLowerCase().charAt(i))
+                    return 1;
+                else if(o1.getName().toLowerCase().charAt(i) < o2.getName().toLowerCase().charAt(i))
+                    return -1;
+                    
+            }
+            return 0;
+        });
     }
     
     /**
