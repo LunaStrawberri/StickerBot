@@ -39,12 +39,7 @@ public class StickerBot {
      * url file variable
      */
     public static JSONFile urlfile;
-    
-    /**
-     * upload role variable
-     */
-    public static String uploadRole;
-    
+     
     /**
      * Main function
      * @param args 
