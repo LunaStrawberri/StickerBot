@@ -46,10 +46,8 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
 
                                 //Register Sticker
                                 Sticker sticker = new Sticker(stickerName, new URL(stickerURL));
-                                StickerManager.addSticker(sticker);
-                                StickerBot.urlfile.save();
+                                StickerManager.addSticker(sticker, true);
 
-                                //t.getMessage().reply("Downloaded " + fileName + " to /stickers/" + stickerName + "." + fileFormat);
                                 t.getMessage().reply("Sticker wurde erstellt!");
                             } catch (MalformedURLException ex) {
                                 Logger.getLogger(StickerUploadListener.class.getName()).log(Level.SEVERE, null, ex);
