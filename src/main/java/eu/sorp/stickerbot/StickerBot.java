@@ -4,8 +4,8 @@ import eu.sorp.stickerbot.file.JSONFile;
 import eu.sorp.stickerbot.listener.ReadyEventListener;
 import eu.sorp.stickerbot.listener.StickerRemoveListener;
 import eu.sorp.stickerbot.listener.StickerUploadListener;
-import eu.sorp.stickerbot.listener.StickersListListener;
-import eu.sorp.stickerbot.listener.StickersSendListener;
+import eu.sorp.stickerbot.listener.StickerListListener;
+import eu.sorp.stickerbot.listener.StickerSendListener;
 import eu.sorp.stickerbot.sticker.StickerManager;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +47,8 @@ public class StickerBot {
     public static void registerListeners(EventDispatcher dispatcher){
         dispatcher.registerListener(new ReadyEventListener());
         dispatcher.registerListener(new StickerUploadListener());
-        dispatcher.registerListener(new StickersSendListener());
-        dispatcher.registerListener(new StickersListListener());
+        dispatcher.registerListener(new StickerSendListener());
+        dispatcher.registerListener(new StickerListListener());
         dispatcher.registerListener(new StickerRemoveListener());
     }
     

@@ -8,7 +8,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
  *
  * @author sorp
  */
-public class StickersListListener implements IListener<MessageReceivedEvent> {
+public class StickerListListener implements IListener<MessageReceivedEvent> {
 
     @Override
     public void handle(MessageReceivedEvent event) {

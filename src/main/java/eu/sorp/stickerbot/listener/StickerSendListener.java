@@ -10,7 +10,7 @@ import sx.blah.discord.util.EmbedBuilder;
  *
  * @author sorp
  */
-public class StickersSendListener implements IListener<MessageReceivedEvent> {
+public class StickerSendListener implements IListener<MessageReceivedEvent> {
 
     @Override
     public void handle(MessageReceivedEvent t) {
