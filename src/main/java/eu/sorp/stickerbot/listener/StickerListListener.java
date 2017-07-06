@@ -21,7 +21,7 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
         
         String message = event.getMessage().getContent();
         
-        if(message.equalsIgnoreCase("#list")){
+        if(message.equalsIgnoreCase("/list")){
             
             EmbedBuilder embedBuilder = new EmbedBuilder()
                             .withAuthorName(StickerBot.DISCORD_CLIENT.getOurUser().getName())

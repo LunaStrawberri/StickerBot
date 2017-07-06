@@ -18,10 +18,10 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
     @Override
     public void handle(MessageReceivedEvent event) {
         
-        if(event.getMessage().getContent().startsWith("#remove")){
+        if(event.getMessage().getContent().startsWith("/remove")){
             if(isAllowedToRemove(event.getGuild(), event.getAuthor())){
                 String stickerName = event.getMessage().getContent();
-                stickerName = stickerName.replaceFirst("(?i)#remove", "");
+                stickerName = stickerName.replaceFirst("(?i)/remove", "");
                 stickerName = stickerName.trim();
                 
                 if(StickerManager.searchWithName(stickerName) != null){

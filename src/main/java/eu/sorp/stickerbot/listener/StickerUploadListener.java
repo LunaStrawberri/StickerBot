@@ -27,10 +27,10 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
         
         String message = t.getMessage().getContent();
         
-        if(message.toLowerCase().startsWith("#upload")){
+        if(message.toLowerCase().startsWith("/upload")){
             if(isAllowedToUpload(t.getGuild(), t.getAuthor())){
                 if(!t.getMessage().getAttachments().isEmpty() && isPicture(t.getMessage().getAttachments().get(0).getFilename())){
-                    message = message.replaceFirst("(?i)#upload", "");
+                    message = message.replaceFirst("(?i)/upload", "");
                     message = message.trim();
 
                     if(message.length() > 0){
