@@ -3,7 +3,10 @@ package eu.sorp.stickerbot.sticker;
 import eu.sorp.stickerbot.StickerBot;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.Collator;
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +28,6 @@ public class StickerManager {
      */
     public static void addSticker(Sticker s, boolean save){
         stickers.add(s);
-        //sortStickers();
         if(save){ 
             StickerBot.urlfile.getJsonObject().put(s.getName(), s.getURL().toString());
             StickerBot.urlfile.save();
@@ -60,29 +62,19 @@ public class StickerManager {
         });
         
     }
-    
+   
     /**
-     * Sorts the stickers by their names
+     * Get a sorted list with the sticker names
+     * @return sticker names in a sorted list
      */
-    //TODO: Fix? :o [Exception in thread "main" java.lang.StringIndexOutOfBoundsException: String index out of range: 2]
-    public static void sortStickers(){
-        stickers.sort((o1, o2) -> {
-            for(int i = 0; i <= o1.getName().length() && i <= o2.getName().length(); i++){
-                
-                if(o1.getName().equalsIgnoreCase(o2.getName())){
-                    if(o1.getName().charAt(i) > o2.getName().charAt(i))
-                        return 1;
-                    else if(o1.getName().charAt(i) < o2.getName().charAt(i))
-                        return -1;
-                }
-                else if(o1.getName().toLowerCase().charAt(i) > o2.getName().toLowerCase().charAt(i))
-                    return 1;
-                else if(o1.getName().toLowerCase().charAt(i) < o2.getName().toLowerCase().charAt(i))
-                    return -1;
-                    
-            }
-            return 0;
+    public static Collection<String> getSortedList(){
+        Collection<String> sortedList = new TreeSet<>(Collator.getInstance());
+        
+        stickers.forEach((t) -> {
+            sortedList.add(t.getName());
         });
+        
+        return sortedList;
     }
     
     /**
