@@ -25,7 +25,7 @@ public class StickerManager {
      */
     public static void addSticker(Sticker s, boolean save){
         stickers.add(s);
-        sortStickers();
+        //sortStickers();
         if(save){ 
             StickerBot.urlfile.getJsonObject().put(s.getName(), s.getURL().toString());
             StickerBot.urlfile.save();
@@ -64,6 +64,7 @@ public class StickerManager {
     /**
      * Sorts the stickers by their names
      */
+    //TODO: Fix? :o [Exception in thread "main" java.lang.StringIndexOutOfBoundsException: String index out of range: 2]
     public static void sortStickers(){
         stickers.sort((o1, o2) -> {
             for(int i = 0; i <= o1.getName().length() && i <= o2.getName().length(); i++){
