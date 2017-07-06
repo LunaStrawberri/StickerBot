@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sx.blah.discord.api.events.IListener;
@@ -84,6 +83,8 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
         if(user.equals(StickerBot.BOT_OWNER)) return true;
         
         final String uploadRole = (String) StickerBot.config.getJsonObject().get("upload-role");
+        if(uploadRole.equals("bot_owner")) return false;
+        
         if(!uploadRole.equals("none")){
             if(!user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)){
                 for(IRole role : user.getRolesForGuild(guild)){

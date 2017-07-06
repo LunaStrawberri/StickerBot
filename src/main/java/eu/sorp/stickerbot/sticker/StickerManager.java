@@ -21,7 +21,7 @@ public class StickerManager {
     /**
      * Adds a sticker to the stickers list and url file
      * @param s sticker to add
-     * @param save save stickers to the url.json file
+     * @param save save sticker to the url.json file
      */
     public static void addSticker(Sticker s, boolean save){
         stickers.add(s);
@@ -36,11 +36,14 @@ public class StickerManager {
     /**
      * Removes a sticker from the stickers list and url file
      * @param s sticker to remove
+     * @param save remove sticker from the url.json file & save
      */
-    public static void removeSticker(Sticker s){
+    public static void removeSticker(Sticker s, boolean save){
         stickers.remove(s);
-        StickerBot.urlfile.getJsonObject().remove(s.getName());
-        StickerBot.urlfile.save();
+        if(save){
+            StickerBot.urlfile.getJsonObject().remove(s.getName());
+            StickerBot.urlfile.save();
+        }
         System.out.println("Removed Sticker " + s.getName());
     }
     

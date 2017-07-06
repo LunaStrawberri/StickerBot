@@ -25,7 +25,7 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
                 stickerName = stickerName.trim();
                 
                 if(StickerManager.searchWithName(stickerName) != null){
-                    StickerManager.removeSticker(StickerManager.searchWithName(stickerName));
+                    StickerManager.removeSticker(StickerManager.searchWithName(stickerName), true);
                     event.getMessage().reply("Sticker wurde entfernt!");
                 } else {
                     event.getMessage().reply("Dieser Sticker existiert nicht.");
@@ -43,11 +43,13 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
         
         if(user.equals(StickerBot.BOT_OWNER)) return true;
         
-        final String uploadRole = (String) StickerBot.config.getJsonObject().get("remove-role");
-        if(!uploadRole.equals("none")){
+        final String removeRole = (String) StickerBot.config.getJsonObject().get("remove-role");
+        if(removeRole.equals("bot_owner")) return false;
+        
+        if(!removeRole.equals("none")){
             if(!user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)){
                 for(IRole role : user.getRolesForGuild(guild)){
-                    if(role.getName().equals(uploadRole)){
+                    if(role.getName().equals(removeRole)){
                         allowed = true;
                     }
                 }
