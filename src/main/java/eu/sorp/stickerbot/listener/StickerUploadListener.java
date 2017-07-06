@@ -64,7 +64,7 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
                     t.getMessage().reply("Es wurde kein Sticker im Anhang gefunden.");
                 }
             } else {
-                t.getMessage().reply("Du bist nicht dazu berichtigt, einen Sticker hochzuladen.");
+                t.getMessage().reply("Du bist nicht dazu berechtigt, einen Sticker hochzuladen.");
             }
         }
         

@@ -32,7 +32,7 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
                 }
                 
             } else {
-                event.getMessage().reply("Du bist nicht dazu berichtigt, einen Sticker zu löschen.");
+                event.getMessage().reply("Du bist nicht dazu berechtigt, einen Sticker zu löschen.");
             }
         }
         
