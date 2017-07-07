@@ -45,9 +45,7 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
             int f = 0;
             for(String str : stickerFields){
                 f += 1;
-                boolean inLine = true;
-                if(f % 3 == 0) inLine = false;
-                embedBuilder.appendField("Sticker " + f, str, false);
+                if(str != null) embedBuilder.appendField("Sticker " + f, str, false);
             }
             
             EmbedObject stickerList = embedBuilder.build();
