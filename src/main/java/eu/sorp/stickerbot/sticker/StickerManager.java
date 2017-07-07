@@ -22,6 +22,11 @@ public class StickerManager {
     public static LinkedList<Sticker> stickers = new LinkedList<>();
     
     /**
+     * Sorted list for sticker names
+     */
+    public static Collection<String> sortedList = new TreeSet<>(Collator.getInstance());
+    
+    /**
      * Adds a sticker to the stickers list and url file
      * @param s sticker to add
      * @param save save sticker to the url.json file
@@ -32,6 +37,7 @@ public class StickerManager {
             StickerBot.urlfile.getJsonObject().put(s.getName(), s.getURL().toString());
             StickerBot.urlfile.save();
         }
+        updateSortedList();
         System.out.println("Added Sticker " + s.getName());
     }
     
@@ -46,6 +52,7 @@ public class StickerManager {
             StickerBot.urlfile.getJsonObject().remove(s.getName());
             StickerBot.urlfile.save();
         }
+        updateSortedList();
         System.out.println("Removed Sticker " + s.getName());
     }
     
@@ -60,6 +67,7 @@ public class StickerManager {
                 Logger.getLogger(StickerManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        updateSortedList();
         
     }
    
@@ -68,13 +76,17 @@ public class StickerManager {
      * @return sticker names in a sorted list
      */
     public static Collection<String> getSortedList(){
-        Collection<String> sortedList = new TreeSet<>(Collator.getInstance());
-        
-        stickers.forEach((t) -> {
+        return sortedList;
+    }
+    
+    /**
+     * Updates the sortedList
+     */
+    public static void updateSortedList(){
+        sortedList.clear();
+         stickers.forEach((t) -> {
             sortedList.add(t.getName());
         });
-        
-        return sortedList;
     }
     
     /**
