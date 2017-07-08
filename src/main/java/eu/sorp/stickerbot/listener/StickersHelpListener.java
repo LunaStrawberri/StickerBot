@@ -18,8 +18,8 @@ public class StickersHelpListener implements IListener<MessageReceivedEvent> {
         
         if(event.getMessage().getContent().equalsIgnoreCase("/stickers")){
             
-            String info = "Der Bot wurde von sorpjp programmiert"
-                        + "\nGitHub: https://github.com/sorpjp/StickerBot";
+            String info = "Der Bot wurde von Ashimara & sorpjp programmiert"
+                        + "\nGitHub: http://sorp.me/src/stickerbot";
             
             String stats = "Stickers: " + StickerManager.stickers.size() + ""
                         + "\nServer: " + StickerBot.DISCORD_CLIENT.getGuilds().size();
