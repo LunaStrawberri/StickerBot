@@ -84,7 +84,7 @@ public class StickerManager {
      */
     public static void updateSortedList(){
         sortedList.clear();
-         stickers.forEach((t) -> {
+        stickers.forEach((t) -> {
             sortedList.add(t.getName());
         });
     }
