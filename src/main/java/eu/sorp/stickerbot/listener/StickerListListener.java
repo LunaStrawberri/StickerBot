@@ -20,22 +20,27 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
         
         String message = event.getMessage().getContent();
         
-        if(message.toLowerCase().toLowerCase().startsWith("/list")){
+        if(message.toLowerCase().startsWith("/list")){
             
             int page = 1;
             
             if(message.split(" ").length > 2){
-                if(event.getGuild() != null) event.getChannel().sendMessage(event.getAuthor().mention() + "\nSyntax Error:\n/list <Seite>");
-                else event.getAuthor().getOrCreatePMChannel().sendMessage(event.getAuthor().mention() + "\nSyntax Error:\n/list <Seite>");
+                if(event.getGuild() != null) event.getMessage().reply("Syntax Error:\n``/list <Seite>``");
+                else event.getAuthor().getOrCreatePMChannel().sendMessage("Syntax Error:\n``/list <Seite>``");
                 return;
             }
             
             if(message.split(" ").length == 2){
                 try {
-                    page = Integer.parseInt(message.replaceFirst("/list ", ""));
+                    page = Integer.parseInt(message.replaceFirst("/list", "").trim());
+                    if(page < 1){
+                        if(event.getGuild() != null) event.getMessage().reply("Die Seitenzahl muss größer als 0 sein.");
+                        else event.getAuthor().getOrCreatePMChannel().sendMessage("Die Seitenzahl muss größer als 0 sein.");
+                        return;
+                    }
                 } catch (NumberFormatException e) {
-                    if(event.getGuild() != null) event.getChannel().sendMessage(event.getAuthor().mention() + " Gib bitte eine Zahl als Seite an.");
-                    else event.getAuthor().getOrCreatePMChannel().sendMessage(event.getAuthor().mention() + " Gib bitte eine Zahl als Seite an.");
+                    if(event.getGuild() != null) event.getMessage().reply("Die Seite muss als Zahl angegeben werden.");
+                    else event.getAuthor().getOrCreatePMChannel().sendMessage("Die Seite muss als Zahl angegeben werden.");
                     return;
                 }
             }
