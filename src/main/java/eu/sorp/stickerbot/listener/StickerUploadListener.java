@@ -88,9 +88,7 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
                 if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(uploadRole)))) {
                     return true;
                 }
-            } else {
-                return true;
-            }
+            } 
         }
         return false;
     }

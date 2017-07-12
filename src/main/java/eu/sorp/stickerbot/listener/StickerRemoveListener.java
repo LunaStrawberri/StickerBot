@@ -49,11 +49,7 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
                 if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(removeRole)))) {
                     return true;
                 }
-            } else {
-                return true;
             }
-        } else {
-            return true;
         }
         return false;
     }
