@@ -26,7 +26,7 @@ public class StickersHelpListener implements IListener<MessageReceivedEvent> {
             
             String commands = "/stickers - Hilfe\n"
                             + "/upload <Stickername> - Sticker hochladen (Sticker als Bild im Anhang)\n"
-                            + "/list - Sendet dir privat eine Liste aller Stickernamen\n"
+                            + "/list <Seite> - Sendet dir privat eine Liste der Stickernamen auf der ausgewählten Seite\n"
                             + "/<Stickername> - Sticker senden";
             
             EmbedBuilder embedBuilder = new EmbedBuilder()

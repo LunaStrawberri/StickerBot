@@ -10,6 +10,8 @@ import eu.sorp.stickerbot.listener.StickersHelpListener;
 import eu.sorp.stickerbot.sticker.StickerManager;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventDispatcher;
@@ -74,9 +76,10 @@ public class StickerBot {
             try{
                 long ownerID = Long.parseLong((String) config.getJsonObject().get("owner"));
                 BOT_OWNER = DISCORD_CLIENT.getUserByID(ownerID);
-                System.out.println("Bot owner: " + BOT_OWNER.getName() + "#" + BOT_OWNER.getDiscriminator());
-            } catch(NumberFormatException e){
-                e.printStackTrace();
+                if(BOT_OWNER != null) System.out.println("Bot owner: " + BOT_OWNER.getName() + "#" + BOT_OWNER.getDiscriminator());
+                else System.out.println("Bot owner: null");
+            } catch(NumberFormatException ex){
+                Logger.getLogger(StickerBot.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -85,8 +88,9 @@ public class StickerBot {
         Map<String, Object> configDefaults = new HashMap<>();
         configDefaults.put("owner", "");
         configDefaults.put("upload-role", "none");
-        configDefaults.put("remove-role", "null (admins & bot owner)");
+        configDefaults.put("remove-role", "null (admins & bot_owner)");
         configDefaults.put("bot-token", "INSERT-BOT-TOKEN");
+        configDefaults.put("pageSize", "50");
         return configDefaults;
     }
     

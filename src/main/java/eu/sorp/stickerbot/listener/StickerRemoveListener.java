@@ -5,7 +5,6 @@ import eu.sorp.stickerbot.sticker.StickerManager;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -39,28 +38,24 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
     }
     
      public boolean isAllowedToRemove(IGuild guild, IUser user){
-        boolean allowed = false;
-        
-        if(user.equals(StickerBot.BOT_OWNER)) return true;
+        if(StickerBot.BOT_OWNER != null)
+            if(user.equals(StickerBot.BOT_OWNER)) return true;
         
         final String removeRole = (String) StickerBot.config.getJsonObject().get("remove-role");
         if(removeRole.equals("bot_owner")) return false;
         
         if(!removeRole.equals("none")){
             if(!user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)){
-                for(IRole role : user.getRolesForGuild(guild)){
-                    if(role.getName().equals(removeRole)){
-                        allowed = true;
-                    }
+                if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(removeRole)))) {
+                    return true;
                 }
             } else {
-                allowed = true;
+                return true;
             }
         } else {
-            allowed = true;
+            return true;
         }
-        
-        return allowed;
+        return false;
     }
     
 }

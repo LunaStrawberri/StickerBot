@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -78,28 +77,22 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
     }
     
     public boolean isAllowedToUpload(IGuild guild, IUser user){
-        boolean allowed = false;
-        
-        if(user.equals(StickerBot.BOT_OWNER)) return true;
+        if(StickerBot.BOT_OWNER != null) 
+            if(user.equals(StickerBot.BOT_OWNER)) return true;
         
         final String uploadRole = (String) StickerBot.config.getJsonObject().get("upload-role");
         if(uploadRole.equals("bot_owner")) return false;
         
         if(!uploadRole.equals("none")){
             if(!user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)){
-                for(IRole role : user.getRolesForGuild(guild)){
-                    if(role.getName().equals(uploadRole)){
-                        allowed = true;
-                    }
+                if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(uploadRole)))) {
+                    return true;
                 }
             } else {
-                allowed = true;
+                return true;
             }
-        } else {
-            allowed = true;
         }
-        
-        return allowed;
+        return false;
     }
     
 }
