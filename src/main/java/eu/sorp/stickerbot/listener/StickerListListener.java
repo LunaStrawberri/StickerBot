@@ -2,10 +2,7 @@ package eu.sorp.stickerbot.listener;
 
 import eu.sorp.stickerbot.StickerBot;
 import eu.sorp.stickerbot.sticker.StickerManager;
-import java.util.Collection;
-import java.util.Iterator;
 import sx.blah.discord.api.events.IListener;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -22,7 +19,9 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
         
         if(message.toLowerCase().startsWith("/list")){
             
+            boolean all = false;
             int page = 1;
+            int pageSize = Integer.parseInt((String) StickerBot.config.getJsonObject().get("pageSize"));
             
             if(message.split(" ").length > 2){
                 if(event.getGuild() != null) event.getMessage().reply("Syntax Error:\n``/list <Seite>``");
@@ -31,39 +30,24 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
             }
             
             if(message.split(" ").length == 2){
-                try {
-                    page = Integer.parseInt(message.replaceFirst("/list", "").trim());
-                    if(page < 1){
-                        if(event.getGuild() != null) event.getMessage().reply("Die Seitenzahl muss größer als 0 sein.");
-                        else event.getAuthor().getOrCreatePMChannel().sendMessage("Die Seitenzahl muss größer als 0 sein.");
+                if(message.replaceFirst("/list", "").trim().equalsIgnoreCase("all"))
+                    all = true;
+                else{  
+                    try {
+                        page = Integer.parseInt(message.replaceFirst("/list", "").trim());
+                    } catch (NumberFormatException e) {
+                        if(event.getGuild() != null) event.getMessage().reply("Die Seite muss als Zahl angegeben werden.");
+                        else event.getAuthor().getOrCreatePMChannel().sendMessage("Die Seite muss als Zahl angegeben werden.");
                         return;
                     }
-                } catch (NumberFormatException e) {
-                    if(event.getGuild() != null) event.getMessage().reply("Die Seite muss als Zahl angegeben werden.");
-                    else event.getAuthor().getOrCreatePMChannel().sendMessage("Die Seite muss als Zahl angegeben werden.");
-                    return;
                 }
             }
             
-            Collection<String> stickers = StickerManager.getSortedList();
+            String[] stickers = StickerManager.getSortedList().toArray(new String[0]);
             
-            int s = stickers.size() / 12;
-            if(stickers.size() % 12 != 0)
-                s++;
-            
-            String[][] stickerFields = new String[s][12];
-            Iterator<String> stickersIt = stickers.iterator();
-            
-            for(int i=0; i < s; i++){
-                for(int i1=0; i1 < 12; i1++){
-                    if(!stickersIt.hasNext())
-                        break;
-                    
-                    stickerFields[i][i1] = stickersIt.next();
-                }
-                if(!stickersIt.hasNext())
-                    break;
-            }
+            int maxPages = stickers.length / pageSize;
+            if(stickers.length % pageSize != 0)
+                maxPages++;
             
             EmbedBuilder embedBuilder = new EmbedBuilder()
                     .withAuthorName(StickerBot.DISCORD_CLIENT.getOurUser().getName())
@@ -71,23 +55,31 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
             
             StringBuilder msg = new StringBuilder();
             
-            if(s >= page){
-                for(String str : stickerFields[page-1]){
-                    if(str == null)
+            if(all){
+                for(int i = 0; i < stickers.length; i++){
+                    if(stickers.length == i)
                         break;
-                    msg.append(str).append("\n");
+                    msg.append(stickers[i]).append("\n");
+                }
+            }else if(page <= maxPages && page > 0){
+                for(int i = pageSize*(page-1); i < pageSize*(page); i++){
+                    if(stickers.length == i)
+                        break;
+                    msg.append(stickers[i]).append("\n");
                 }
             }
             
-            if(msg.length() > 0) embedBuilder.appendField("Seite " + page + " von " + s, msg.toString(), false);
+            if(msg.length() == 0) {
+                if(event.getGuild() != null) event.getMessage().reply("Keine Sticker auf dieser Seite vorhanden.\nAnzahl an Seiten: " + maxPages);
+                else event.getAuthor().getOrCreatePMChannel().sendMessage("Keine Sticker auf dieser Seite vorhanden.\nAnzahl an Seiten: " + maxPages);
+                return;
+            }
             
-            if(embedBuilder.getFieldCount() == 0) embedBuilder.appendDescription("Keine Sticker auf dieser Seite vorhanden.\nAnzahl an Seiten: " + s);
-                
-            EmbedObject stickerList = embedBuilder.build();
-            event.getAuthor().getOrCreatePMChannel().sendMessage(stickerList);
+            if(!all) embedBuilder.appendField("Seite " + page + " von " + maxPages, msg.toString(), false);
+            else embedBuilder.appendField("Alle Sticker", msg.toString(), false);
             
+            event.getAuthor().getOrCreatePMChannel().sendMessage(embedBuilder.build());
             if(event.getGuild() != null) event.getMessage().reply("Die Liste wurde dir privat gesendet.");
-            
             
         }
         
