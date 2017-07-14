@@ -77,18 +77,19 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
     }
     
     public boolean isAllowedToUpload(IGuild guild, IUser user){
-        if(StickerBot.BOT_OWNER != null) 
-            if(user.equals(StickerBot.BOT_OWNER)) return true;
-        
         final String uploadRole = (String) StickerBot.config.getJsonObject().get("upload-role");
-        if(uploadRole.equals("bot_owner")) return false;
+        
+        if(StickerBot.BOT_OWNER != null) 
+            if(uploadRole.equals("bot_owner") && user.equals(StickerBot.BOT_OWNER)) return true;
         
         if(!uploadRole.equals("none")){
             if(!user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)){
                 if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(uploadRole)))) {
                     return true;
                 }
-            } 
+            }else{
+                return true;
+            }
         }
         return false;
     }
