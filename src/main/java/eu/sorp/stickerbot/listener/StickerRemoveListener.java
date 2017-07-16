@@ -40,8 +40,10 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
     public boolean isAllowedToRemove(IGuild guild, IUser user){
         final String removeRole = (String) StickerBot.config.getJsonObject().get("remove-role");
         
-        if(StickerBot.BOT_OWNER != null) 
-            if(removeRole.equals("bot_owner") && user.equals(StickerBot.BOT_OWNER)) return true;
+         if(StickerBot.BOT_OWNER != null)
+            if(removeRole.equals("bot_owner"))
+                if(user.equals(StickerBot.BOT_OWNER)) return true;
+                else return false;
         
         if(!removeRole.equals("none")){
             if(!user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)){
