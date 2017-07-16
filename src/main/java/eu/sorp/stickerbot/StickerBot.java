@@ -9,7 +9,10 @@ import eu.sorp.stickerbot.listener.StickerSearchListener;
 import eu.sorp.stickerbot.listener.StickerSendListener;
 import eu.sorp.stickerbot.listener.StickersHelpListener;
 import eu.sorp.stickerbot.sticker.StickerManager;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +46,11 @@ public class StickerBot {
      * url file variable
      */
     public static JSONFile urlfile;
+    
+    /**
+     * command list variable
+     */
+    public static List<String> commandList;
      
     /**
      * Main function
@@ -51,6 +59,7 @@ public class StickerBot {
     public static void main(String[] args) {
         config = new JSONFile("config.json", getConfigDefaults());
         urlfile = new JSONFile("url.json");
+        commandList = Arrays.asList("list", "remove", "search", "send", "upload");
         StickerManager.loadStickers();
         DISCORD_CLIENT = new ClientBuilder().withToken((String) config.getJsonObject().get("bot-token")).login();
         registerListeners(DISCORD_CLIENT.getDispatcher());

@@ -23,32 +23,36 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
 
     @Override
     public void handle(MessageReceivedEvent t) {
-        
+
         String message = t.getMessage().getContent();
-        
-        if(message.startsWith("/upload")){
-            if(isAllowedToUpload(t.getGuild(), t.getAuthor())){
-                if(!t.getMessage().getAttachments().isEmpty() && isPicture(t.getMessage().getAttachments().get(0).getFilename())){
+
+        if (message.startsWith("/upload")) {
+            if (isAllowedToUpload(t.getGuild(), t.getAuthor())) {
+                if (!t.getMessage().getAttachments().isEmpty() && isPicture(t.getMessage().getAttachments().get(0).getFilename())) {
                     message = message.replaceFirst("(?i)/upload", "");
                     message = message.trim();
 
-                    if(message.length() > 0){
+                    if (message.length() > 0) {
 
                         String stickerName = message.toLowerCase();
                         String stickerURL = t.getMessage().getAttachments().get(0).getUrl();
 
-                        if(StickerManager.searchWithName(stickerName) == null){
+                        if (StickerManager.searchWithName(stickerName) == null) {
 
-                            try {
-                                StickerBot.urlfile.getJsonObject().put(stickerName, stickerURL);
+                            if (!StickerBot.commandList.contains(stickerName)) {
+                                try {
+                                    StickerBot.urlfile.getJsonObject().put(stickerName, stickerURL);
 
-                                //Register Sticker
-                                Sticker sticker = new Sticker(stickerName, new URL(stickerURL));
-                                StickerManager.addSticker(sticker, true);
+                                    //Register Sticker
+                                    Sticker sticker = new Sticker(stickerName, new URL(stickerURL));
+                                    StickerManager.addSticker(sticker, true);
 
-                                t.getMessage().reply("Sticker wurde erstellt!");
-                            } catch (MalformedURLException ex) {
-                                Logger.getLogger(StickerUploadListener.class.getName()).log(Level.SEVERE, null, ex);
+                                    t.getMessage().reply("Sticker wurde erstellt!");
+                                } catch (MalformedURLException ex) {
+                                    Logger.getLogger(StickerUploadListener.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            } else {
+                                t.getMessage().reply("Dieser Name darf nicht verwendet werden, bitte verwende einen anderen Namen.");
                             }
 
                         } else {
@@ -66,35 +70,41 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
                 t.getMessage().reply("Du bist nicht dazu berechtigt, einen Sticker hochzuladen.");
             }
         }
-        
+
     }
-    
-    public boolean isPicture(String fileName){
+
+    public boolean isPicture(String fileName) {
         List<String> validFormats = Arrays.asList("gif", "png", "jpg");
         String format = fileName.substring(fileName.length() - 3, fileName.length());
-        
+
         return validFormats.contains(format);
     }
-    
-    public boolean isAllowedToUpload(IGuild guild, IUser user){
+
+    public boolean isAllowedToUpload(IGuild guild, IUser user) {
         final String uploadRole = (String) StickerBot.config.getJsonObject().get("upload-role");
-        
-         if(StickerBot.BOT_OWNER != null){
-            if(uploadRole.equals("bot_owner")){
-                if(user.equals(StickerBot.BOT_OWNER)) return true;
-                else return false;
+
+        if (StickerBot.BOT_OWNER != null) {
+            if (uploadRole.equals("bot_owner")) {
+                if (user.equals(StickerBot.BOT_OWNER)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
-         
-        if(uploadRole.equals("none"))
+
+        if (uploadRole.equals("none")) {
             return true;
-        
-        if(user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR))
+        }
+
+        if (user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR)) {
             return true;
-        if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(uploadRole))))
+        }
+        if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(uploadRole)))) {
             return true;
-        
+        }
+
         return false;
     }
-    
+
 }
