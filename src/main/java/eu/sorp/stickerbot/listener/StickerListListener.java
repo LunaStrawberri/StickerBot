@@ -17,7 +17,7 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
         
         String message = event.getMessage().getContent();
         
-        if(message.toLowerCase().startsWith("/list")){
+        if(message.startsWith("/list")){
             
             boolean all = false;
             int page = 1;
@@ -30,7 +30,7 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
             }
             
             if(message.split(" ").length == 2){
-                if(message.replaceFirst("/list", "").trim().equalsIgnoreCase("all"))
+                if(message.replaceFirst("/list", "").trim().equals("all"))
                     all = true;
                 else{  
                     try {

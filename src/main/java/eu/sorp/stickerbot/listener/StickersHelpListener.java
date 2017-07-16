@@ -16,7 +16,7 @@ public class StickersHelpListener implements IListener<MessageReceivedEvent> {
     @Override
     public void handle(MessageReceivedEvent event) {
         
-        if(event.getMessage().getContent().equalsIgnoreCase("/stickers")){
+        if(event.getMessage().getContent().equals("/stickers")){
             
             String info = "Der Bot wurde von Ashimara & sorpjp programmiert"
                         + "\nGitHub: http://sorp.me/src/stickerbot";
