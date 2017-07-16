@@ -16,7 +16,7 @@ public class StickersHelpListener implements IListener<MessageReceivedEvent> {
     @Override
     public void handle(MessageReceivedEvent event) {
         
-        if(event.getMessage().getContent().equalsIgnoreCase("/stickers")){
+        if(event.getMessage().getContent().equals("/stickers")){
             
             String info = "Der Bot wurde von Ashimara & sorpjp programmiert"
                         + "\nGitHub: http://sorp.me/src/stickerbot";
@@ -27,6 +27,7 @@ public class StickersHelpListener implements IListener<MessageReceivedEvent> {
             String commands = "/stickers - Hilfe\n"
                             + "/upload <Stickername> - Sticker hochladen (Sticker als Bild im Anhang)\n"
                             + "/list <Seite> - Sendet dir privat eine Liste der Stickernamen auf der ausgewählten Seite\n"
+                            + "/search <...> - Sendet dir privat eine Liste der Stickernamen die deiner Suche entsprechen\n"
                             + "/<Stickername> - Sticker senden";
             
             EmbedBuilder embedBuilder = new EmbedBuilder()

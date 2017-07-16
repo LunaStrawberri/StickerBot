@@ -5,6 +5,7 @@ import eu.sorp.stickerbot.listener.ReadyEventListener;
 import eu.sorp.stickerbot.listener.StickerRemoveListener;
 import eu.sorp.stickerbot.listener.StickerUploadListener;
 import eu.sorp.stickerbot.listener.StickerListListener;
+import eu.sorp.stickerbot.listener.StickerSearchListener;
 import eu.sorp.stickerbot.listener.StickerSendListener;
 import eu.sorp.stickerbot.listener.StickersHelpListener;
 import eu.sorp.stickerbot.sticker.StickerManager;
@@ -66,6 +67,7 @@ public class StickerBot {
         dispatcher.registerListener(new StickerListListener());
         dispatcher.registerListener(new StickerRemoveListener());
         dispatcher.registerListener(new StickersHelpListener());
+        dispatcher.registerListener(new StickerSearchListener());
     }
     
     /**
