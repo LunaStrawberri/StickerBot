@@ -59,7 +59,7 @@ public class StickerBot {
     public static void main(String[] args) {
         config = new JSONFile("config.json", getConfigDefaults());
         urlfile = new JSONFile("url.json");
-        commandList = Arrays.asList("list", "remove", "search", "send", "upload");
+        commandList = Arrays.asList("list", "remove", "search", "send", "upload", "stickers");
         StickerManager.loadStickers();
         DISCORD_CLIENT = new ClientBuilder().withToken((String) config.getJsonObject().get("bot-token")).login();
         registerListeners(DISCORD_CLIENT.getDispatcher());
