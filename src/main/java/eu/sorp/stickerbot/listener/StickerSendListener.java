@@ -14,13 +14,14 @@ public class StickerSendListener implements IListener<MessageReceivedEvent> {
 
     @Override
     public void handle(MessageReceivedEvent t) {
-        
+
         String message = t.getMessage().getContent();
-        
-        StickerManager.stickers.forEach((s) -> {
-            if(message.equals("/" + s.getName())){
+
+        if (message.startsWith("/")) {
+            StickerManager.stickers.forEach((s) -> {
+                if (message.equals("/" + s.getName())) {
                     t.getMessage().delete();
-                    
+
                     EmbedBuilder stickerBuilder = new EmbedBuilder()
                             .withImage(s.getURL().toString())
                             .withAuthorName(t.getAuthor().getDisplayName(t.getGuild()))
@@ -28,11 +29,12 @@ public class StickerSendListener implements IListener<MessageReceivedEvent> {
                             .withFooterText("Sticker: " + s.getName())
                             .withTimestamp(System.currentTimeMillis());
                     EmbedObject sticker = stickerBuilder.build();
-                    
+
                     t.getChannel().sendMessage(sticker);
-           }
-        });
-        
+                }
+            });
+        }
+
     }
-    
+
 }
