@@ -1,5 +1,6 @@
 *target/
 *stickers/
 *modules/
+nbactions.xml
 config.json
 url.json

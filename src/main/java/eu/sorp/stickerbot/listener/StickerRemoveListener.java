@@ -50,7 +50,7 @@ public class StickerRemoveListener implements IListener<MessageReceivedEvent> {
         if(removeRole.equals("none"))
             return true;
         
-         if(user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR))
+        if(user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR))
             return true;
         if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(removeRole))))
             return true;

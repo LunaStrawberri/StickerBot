@@ -89,7 +89,7 @@ public class StickerUploadListener implements IListener<MessageReceivedEvent> {
         if(uploadRole.equals("none"))
             return true;
         
-         if(user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR))
+        if(user.getPermissionsForGuild(guild).contains(Permissions.ADMINISTRATOR))
             return true;
         if (user.getRolesForGuild(guild).stream().anyMatch((role) -> (role.getName().equals(uploadRole))))
             return true;
