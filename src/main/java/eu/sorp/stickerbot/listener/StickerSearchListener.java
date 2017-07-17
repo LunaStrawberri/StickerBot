@@ -28,11 +28,25 @@ public class StickerSearchListener implements IListener<MessageReceivedEvent>{
                 
                 StringBuilder resultMsg = new StringBuilder();
                 
-                stickers.forEach((t) -> {
+                for(String t : stickers){
                     if(t.contains(cmd)){
                         resultMsg.append(t).append("\n");
+                        if(resultMsg.length() >= 1024){
+                            resultMsg.delete(resultMsg.length()-2, resultMsg.length())
+                                    .delete(resultMsg.lastIndexOf("\n"), resultMsg.length());
+                            
+                            emdBld.appendField("Results", resultMsg.toString(), false);
+                            e.getAuthor().getOrCreatePMChannel().sendMessage(emdBld.build());
+                            
+                            emdBld = new EmbedBuilder()
+                                .withAuthorName(StickerBot.DISCORD_CLIENT.getOurUser().getName())
+                                .withAuthorIcon(StickerBot.DISCORD_CLIENT.getOurUser().getAvatarURL());
+                            resultMsg = new StringBuilder();
+                        
+                            resultMsg.append(t).append("\n");
+                        }
                     }
-                });
+                }
                 
                 if(resultMsg.length() == 0){
                     if(e.getGuild() != null) e.getMessage().reply("Es existieren keine Sticker mit: ``" + cmd + "``");

@@ -56,16 +56,42 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
             StringBuilder msg = new StringBuilder();
             
             if(all){
-                for(int i = 0; i < stickers.length; i++){
-                    if(stickers.length == i)
-                        break;
-                    msg.append(stickers[i]).append("\n");
+                for(String sticker : stickers){
+                    msg.append(sticker).append("\n");
+                    if(msg.length() >= 1024){
+                        msg.delete(msg.length()-2, msg.length())
+                                .delete(msg.lastIndexOf("\n"), msg.length());
+                        
+                        embedBuilder.appendField("Alle Sticker", msg.toString(), false);
+                        event.getAuthor().getOrCreatePMChannel().sendMessage(embedBuilder.build());
+                        
+                        embedBuilder = new EmbedBuilder()
+                                .withAuthorName(StickerBot.DISCORD_CLIENT.getOurUser().getName())
+                                .withAuthorIcon(StickerBot.DISCORD_CLIENT.getOurUser().getAvatarURL());
+                        msg = new StringBuilder();
+                        
+                        msg.append(sticker).append("\n");
+                    }
                 }
             }else if(page <= maxPages && page > 0){
                 for(int i = pageSize*(page-1); i < pageSize*(page); i++){
                     if(stickers.length == i)
                         break;
                     msg.append(stickers[i]).append("\n");
+                    if(msg.length() >= 1024){
+                        msg.delete(msg.length()-2, msg.length())
+                                .delete(msg.lastIndexOf("\n"), msg.length());
+                        
+                        embedBuilder.appendField("Seite " + page + " von " + maxPages, msg.toString(), false);
+                        event.getAuthor().getOrCreatePMChannel().sendMessage(embedBuilder.build());
+                        
+                        embedBuilder = new EmbedBuilder()
+                                .withAuthorName(StickerBot.DISCORD_CLIENT.getOurUser().getName())
+                                .withAuthorIcon(StickerBot.DISCORD_CLIENT.getOurUser().getAvatarURL());
+                        msg = new StringBuilder();
+                        
+                        msg.append(stickers[i]).append("\n");
+                    }
                 }
             }
             

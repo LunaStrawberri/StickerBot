@@ -9,7 +9,6 @@ import eu.sorp.stickerbot.listener.StickerSearchListener;
 import eu.sorp.stickerbot.listener.StickerSendListener;
 import eu.sorp.stickerbot.listener.StickersHelpListener;
 import eu.sorp.stickerbot.sticker.StickerManager;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
