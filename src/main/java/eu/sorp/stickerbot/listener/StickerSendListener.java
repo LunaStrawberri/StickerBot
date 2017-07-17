@@ -20,7 +20,7 @@ public class StickerSendListener implements IListener<MessageReceivedEvent> {
         if (message.startsWith("/")) {
             StickerManager.stickers.forEach((s) -> {
                 if (message.equals("/" + s.getName())) {
-                    t.getMessage().delete();
+                    if(t.getGuild() != null) t.getMessage().delete();
 
                     EmbedBuilder stickerBuilder = new EmbedBuilder()
                             .withImage(s.getURL().toString())
@@ -30,7 +30,8 @@ public class StickerSendListener implements IListener<MessageReceivedEvent> {
                             .withTimestamp(System.currentTimeMillis());
                     EmbedObject sticker = stickerBuilder.build();
 
-                    t.getChannel().sendMessage(sticker);
+                    if(t.getGuild() != null) t.getChannel().sendMessage(sticker);
+                    else t.getAuthor().getOrCreatePMChannel().sendMessage(sticker);
                 }
             });
         }
