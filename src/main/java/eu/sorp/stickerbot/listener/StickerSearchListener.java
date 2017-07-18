@@ -5,6 +5,7 @@ import eu.sorp.stickerbot.sticker.StickerManager;
 import java.util.Collection;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
 
 public class StickerSearchListener implements IListener<MessageReceivedEvent>{
@@ -17,6 +18,11 @@ public class StickerSearchListener implements IListener<MessageReceivedEvent>{
         if(msg.startsWith("/search")){
             
             final String cmd = msg.replaceFirst("/search", "").trim();
+            
+            IMessage progressMsg;
+            
+            if(e.getGuild() != null) progressMsg = e.getMessage().reply("Sticker werden gesucht...");
+            else progressMsg = e.getAuthor().getOrCreatePMChannel().sendMessage(e.getAuthor().mention() + " Sticker werden gesucht...");
             
             if(!cmd.equals("")){
                 
@@ -49,19 +55,17 @@ public class StickerSearchListener implements IListener<MessageReceivedEvent>{
                 }
                 
                 if(resultMsg.length() == 0){
-                    if(e.getGuild() != null) e.getMessage().reply("Es existieren keine Sticker mit: ``" + cmd + "``");
-                    else e.getAuthor().getOrCreatePMChannel().sendMessage("Es existieren keine Sticker mit: ``" + cmd + "``");
+                    progressMsg.edit(e.getAuthor().mention() + " Es existieren keine Sticker mit: ``" + cmd + "``");
                     return;
                 }
                 
                 emdBld.appendField("Results", resultMsg.toString(), false);
                 
                 e.getAuthor().getOrCreatePMChannel().sendMessage(emdBld.build());
-                if(e.getGuild() != null) e.getMessage().reply("Die Ergebnisse wurden dir privat gesendet.");
+                progressMsg.edit(e.getAuthor().mention() + " Die Ergebnisse wurden dir gesendet");
                 
             }else{
-                if(e.getGuild() != null) e.getMessage().reply("Syntax Error:\n``/search <...>``");
-                else e.getAuthor().getOrCreatePMChannel().sendMessage("Syntax Error:\n``/search <...>``");
+                progressMsg.edit(e.getAuthor().mention() + " Syntax Error:\n``/search <...>``");
             }
             
         }

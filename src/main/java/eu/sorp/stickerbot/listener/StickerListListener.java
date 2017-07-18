@@ -4,6 +4,7 @@ import eu.sorp.stickerbot.StickerBot;
 import eu.sorp.stickerbot.sticker.StickerManager;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
 
 /**
@@ -19,13 +20,17 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
         
         if(message.startsWith("/list")){
             
+            IMessage progressMsg;
+            
+            if(event.getGuild() != null) progressMsg = event.getMessage().reply("Liste wird zusammengestellt...");
+            else progressMsg = event.getAuthor().getOrCreatePMChannel().sendMessage(event.getAuthor().mention() + " Liste wird zusammengestellt...");
+            
             boolean all = false;
             int page = 1;
             int pageSize = Integer.parseInt((String) StickerBot.config.getJsonObject().get("pageSize"));
             
             if(message.split(" ").length > 2){
-                if(event.getGuild() != null) event.getMessage().reply("Syntax Error:\n``/list <Seite>``");
-                else event.getAuthor().getOrCreatePMChannel().sendMessage("Syntax Error:\n``/list <Seite>``");
+                progressMsg.edit(event.getAuthor().mention() + " Syntax Error:\n``/list <Seite>``");
                 return;
             }
             
@@ -36,8 +41,7 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
                     try {
                         page = Integer.parseInt(message.replaceFirst("/list", "").trim());
                     } catch (NumberFormatException e) {
-                        if(event.getGuild() != null) event.getMessage().reply("Die Seite muss als Zahl angegeben werden.");
-                        else event.getAuthor().getOrCreatePMChannel().sendMessage("Die Seite muss als Zahl angegeben werden.");
+                        progressMsg.edit(event.getAuthor().mention() + " Die Seite muss als Zahl angegeben werden.");
                         return;
                     }
                 }
@@ -96,8 +100,7 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
             }
             
             if(msg.length() == 0) {
-                if(event.getGuild() != null) event.getMessage().reply("Keine Sticker auf dieser Seite vorhanden.\nAnzahl an Seiten: " + maxPages);
-                else event.getAuthor().getOrCreatePMChannel().sendMessage("Keine Sticker auf dieser Seite vorhanden.\nAnzahl an Seiten: " + maxPages);
+                progressMsg.edit(event.getAuthor().mention() + " Keine Sticker auf dieser Seite vorhanden.\nAnzahl an Seiten: " + maxPages);
                 return;
             }
             
@@ -105,7 +108,7 @@ public class StickerListListener implements IListener<MessageReceivedEvent> {
             else embedBuilder.appendField("Alle Sticker", msg.toString(), false);
             
             event.getAuthor().getOrCreatePMChannel().sendMessage(embedBuilder.build());
-            if(event.getGuild() != null) event.getMessage().reply("Die Liste wurde dir privat gesendet.");
+            progressMsg.edit(event.getAuthor().mention() + " Die Liste wurde dir gesendet");
             
         }
         
